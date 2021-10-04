@@ -3,22 +3,22 @@ let db;
 //establish a connection to IndexedDB database called 
 const request = indexedDB.open('budget_tracker', 1)
 
-request.onupgradeneeded = function (event) {
-    const db = event.target.result;
+request.onupgradeneeded = function (e) {
+    const db = e.target.result;
     db.createObjectStore('new_budget', { autoIncrement: true });
 };
 
 //request succesful
-request.onsuccess = function (event) {
-    db = event.target.result;
+request.onsuccess = function (e) {
+    db = e.target.result;
     if (navigator.onLine) {
         uploadBudget()
     }
 };
 
-request.onerror = function (event) {
+request.onerror = function (e) {
     //log error
-    console.log(event.target.errorCode)
+    console.log(e.target.errorCode)
 };
 function saveRecord(record) {
     // This function will be executed if we attempt to submit a new bank transaction and there's no internet connection
@@ -55,7 +55,7 @@ function uploadBudget() {
                     const budgetObjectStore = transaction.objectStore('new_budget');
                     budgetObjectStore.clear();
 
-                    alert('All saved transactions has been uploaded!');
+                    alert('All saved transactions have been uploaded!');
                 })
                 .catch(err => {
                     console.log(err);
@@ -64,4 +64,4 @@ function uploadBudget() {
     };
 }
 
-window.addEventListener('online', uploadBudget);
+window.addeListener('online', uploadBudget);
